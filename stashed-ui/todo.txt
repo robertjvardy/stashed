@@ -1,0 +1,16 @@
+ToDo:
+Fundamental Dev
+- make side drawer
+- enhance pannel to show vol and current price
+- migrate from hardcoded tickers to user input
+- make backend for string tickers
+- make settings remembered via cookies
+- add routing and login functionality
+Filter
+- add filtering options
+- add search functionality
+Access Key
+- add functionality for user to input access code
+- app should have default page to navigate to if used hasnt provided one
+- if daily limit exceeded message in modal should be shown
+- test
