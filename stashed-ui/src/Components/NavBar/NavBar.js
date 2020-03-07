@@ -7,6 +7,7 @@ import InputBase from "@material-ui/core/InputBase";
 import { fade, makeStyles } from "@material-ui/core/styles";
 import MenuIcon from "@material-ui/icons/Menu";
 import SearchIcon from "@material-ui/icons/Search";
+import { useHistory } from "react-router-dom";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -16,6 +17,7 @@ const useStyles = makeStyles(theme => ({
     marginRight: theme.spacing(2)
   },
   title: {
+    cursor: "pointer",
     flexGrow: 1,
     display: "none",
     [theme.breakpoints.up("sm")]: {
@@ -61,22 +63,29 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default function NavBar() {
+const NavBar = props => {
+  const history = useHistory();
   const classes = useStyles();
-
+  const { handleDrawerToggle } = props;
   return (
     <div className={classes.root}>
-      <AppBar position="static">
+      <AppBar position="fixed">
         <Toolbar>
           <IconButton
             edge="start"
             className={classes.menuButton}
             color="inherit"
             aria-label="open drawer"
+            onClick={handleDrawerToggle("left", true)}
           >
             <MenuIcon />
           </IconButton>
-          <Typography className={classes.title} variant="h5" noWrap>
+          <Typography
+            className={classes.title}
+            variant="h5"
+            noWrap
+            onClick={() => history.push("/")}
+          >
             Stashed
           </Typography>
           <div className={classes.search}>
@@ -96,4 +105,6 @@ export default function NavBar() {
       </AppBar>
     </div>
   );
-}
+};
+
+export default NavBar;

@@ -1,5 +1,6 @@
 // converts data from Alpha Avantage API to canvasJS readable format
 export const timeSeriesConverter = (data, interval) => {
+  console.log(data);
   const timeSeries = data[`Time Series (${interval})`];
   const timeStamps = Object.keys(timeSeries);
   let dataList = [];
@@ -16,19 +17,19 @@ const getPreviousWorkDay = () => {
   const currentHour = today.getHours();
   const currentMinute = today.getMinutes();
   const currentDay = today.getDay();
-  let beforeOpen = true;
-  if (currentHour < 9 || (currentHour === 9 && currentMinute < 30)) {
-    beforeOpen = false;
+  let dayStarted = currentHour < 9 || (currentHour === 9 && currentMinute < 30);
+  const weekend = [0, 6];
+  switch (true) {
+    case weekend.includes(currentDay):
+      return 5;
+    case currentDay === 1:
+      return dayStarted ? 1 : 5;
+    default:
+      return dayStarted ? currentDay : currentDay - 1;
   }
-  const weekendAndMonday = [0, 1, 6];
-  let desiredDay = weekendAndMonday.includes(currentDay) ? 5 : today;
-  desiredDay =
-    beforeOpen && !weekendAndMonday.includes(currentDay)
-      ? desiredDay - 1
-      : desiredDay;
-  return desiredDay;
 };
 
 export const filterSingleDayData = data => {
-  const PreviousWorkDay = getPreviousWorkDay();
+  const previousWorkDay = getPreviousWorkDay();
+  return data.filter(date => date.x.getDay() === previousWorkDay);
 };
