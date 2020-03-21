@@ -7,13 +7,18 @@ import Drawer from "@material-ui/core/Drawer";
 import SideDrawer from "./Components/SideDrawer/SideDrawer";
 import EquityDetails from "./Components/EquityDetails/EquityDetails";
 
-function App() {
+const App = () => {
   const [tickers, setTickers] = useState(["AAPL", "TSLA"]);
   const [state, setState] = useState({
     left: false
   });
 
-  // extract this
+  const addTicker = newTicker => {
+    if (tickers.includes(newTicker)) throw "Equity Already Tracked";
+    setTickers([...tickers, newTicker]);
+  };
+
+  // TODO remove side argument
   const toggleDrawer = (side, open) => event => {
     if (
       event.type === "keydown" &&
@@ -43,11 +48,11 @@ function App() {
           />
         </Switch>
         <Drawer open={state.left} onClose={toggleDrawer("left", false)}>
-          <SideDrawer />
+          <SideDrawer addTicker={addTicker} />
         </Drawer>
       </div>
     </div>
   );
-}
+};
 
 export default App;

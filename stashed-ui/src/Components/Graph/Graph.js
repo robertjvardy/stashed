@@ -23,6 +23,7 @@ const Graph = props => {
     ]
   };
 
+  // TODO replace with better graph
   return <CanvasJSChart options={options} />;
 };
 

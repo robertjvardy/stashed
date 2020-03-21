@@ -1,6 +1,6 @@
 import React from "react";
 import "./PannelsContainer.css";
-import Pannel from "../Pannel/Pannel";
+import Pannel from "./Pannel/Pannel";
 
 const PannelsContainer = props => {
   const { tickers } = props;

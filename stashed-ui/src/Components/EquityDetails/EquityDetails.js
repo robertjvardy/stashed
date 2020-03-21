@@ -1,13 +1,18 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import VerticalTabs from "../VerticalTabs/VerticalTabs";
+import Summary from "./Tabs/Summary";
+import "./EquityDetails.css";
+import axios from "axios";
+import CircularProgress from "@material-ui/core/CircularProgress";
 
 const EquityDetails = props => {
   const { ticker } = props;
+  const [profile, setProfile] = useState(undefined);
   const list = [
     {
       id: 0,
-      label: "Item 1",
-      component: <div className="content">Item One</div>
+      label: "Summary",
+      component: <Summary profile={profile} />
     },
     {
       id: 1,
@@ -25,11 +30,28 @@ const EquityDetails = props => {
       component: <div className="content">Item Four</div>
     }
   ];
-  return (
-    <div>
-      <h2>{ticker}</h2>
+  const fetchProfile = async () => {
+    const response = await axios.get(
+      "https://finnhub.io/api/v1/stock/profile",
+      {
+        params: {
+          symbol: ticker,
+          token: "bpeg3mnrh5rckeckl8m0"
+        }
+      }
+    );
+    setProfile(response.data);
+  };
+  useEffect(() => {
+    fetchProfile();
+  }, []);
+  return profile ? (
+    <div id="equity-container">
+      <h2 id="equity-name">{profile.name}</h2>
       <VerticalTabs tabs={list} />
     </div>
+  ) : (
+    <CircularProgress />
   );
 };
 

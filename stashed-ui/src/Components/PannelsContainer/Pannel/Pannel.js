@@ -1,17 +1,18 @@
 import React, { useState, useEffect } from "react";
-import Graph from "../Graph/Graph";
+import Graph from "../../Graph/Graph";
 import axios from "axios";
-import { timeSeriesConverter, filterSingleDayData } from "../../utils";
+import { timeSeriesConverter, filterSingleDayData } from "../../../utils";
 import { useHistory } from "react-router-dom";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import "./Pannel.css";
 
-import { testData } from "../../assets/testData";
-import PannelSummary from "../PannelSummary";
+import { testData } from "../../../assets/testData";
+import PannelSummary from "./PannelSummary/PannelSummary";
 
 const Pannel = props => {
   const [timeSeriesData, setTimeSeriesData] = useState(undefined);
   const [interval, setInterval] = useState("1min");
+  const [profile, setProfile] = useState(undefined);
   const { ticker } = props;
   const history = useHistory();
   const fetchData = async () => {
@@ -28,12 +29,25 @@ const Pannel = props => {
       filterSingleDayData(timeSeriesConverter(response.data, interval))
     );
   };
-  useEffect(() => {
-    // fetchData();
-    // setTimeout(() => fetchData(), 60 * 2 * 1000); // every 2 minutes
-    setTimeSeriesData(
-      filterSingleDayData(timeSeriesConverter(testData, interval))
+  const fetchProfile = async () => {
+    const response = await axios.get(
+      "https://finnhub.io/api/v1/stock/profile",
+      {
+        params: {
+          symbol: ticker,
+          token: "bpeg3mnrh5rckeckl8m0"
+        }
+      }
     );
+    setProfile(response.data);
+  };
+  useEffect(() => {
+    fetchData();
+    setTimeout(() => fetchData(), 60 * 2 * 1000); // every 2 minutes
+    fetchProfile();
+    // setTimeSeriesData(
+    //   filterSingleDayData(timeSeriesConverter(testData, interval))
+    // );
   }, []);
 
   return (
@@ -42,7 +56,7 @@ const Pannel = props => {
         className="pannel-header"
         onClick={() => history.push(`/equity/${ticker}`)}
       >
-        <h1 className="pannel-title">{ticker}</h1>
+        <h1 className="pannel-title">{profile ? profile.name : undefined}</h1>
       </div>
       {timeSeriesData ? (
         <>

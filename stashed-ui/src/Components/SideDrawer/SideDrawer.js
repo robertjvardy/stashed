@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { makeStyles } from "@material-ui/core/styles";
 import List from "@material-ui/core/List";
 import Divider from "@material-ui/core/Divider";
 import ListItem from "@material-ui/core/ListItem";
@@ -8,21 +7,12 @@ import ListItemText from "@material-ui/core/ListItemText";
 import InboxIcon from "@material-ui/icons/MoveToInbox";
 import MailIcon from "@material-ui/icons/Mail";
 import AddCircleIcon from "@material-ui/icons/AddCircle";
-import Modal from "../Modal/Modal";
+import "./SideDrawer.css";
+import AddEquityModal from "./AddEquityModal/AddEquityModal";
 
-const useStyles = makeStyles({
-  list: {
-    width: 250
-  },
-  fullList: {
-    width: "auto"
-  }
-});
-
-const SideDrawer = () => {
-  const classes = useStyles();
+const SideDrawer = props => {
+  const { addTicker } = props;
   const [open, setOpen] = useState(false);
-
   const handleOpen = () => {
     setOpen(true);
   };
@@ -31,7 +21,7 @@ const SideDrawer = () => {
     setOpen(false);
   };
   return (
-    <div className={classes.list} role="presentation">
+    <div className="list" role="presentation">
       <List>
         {["Inbox", "Starred", "Send email", "Watch Lists"].map(
           (text, index) => (
@@ -50,12 +40,16 @@ const SideDrawer = () => {
           <ListItemIcon>
             <AddCircleIcon />
           </ListItemIcon>
-          <ListItemText primary="Add Security" />
+          <ListItemText primary="Add Equity" />
         </ListItem>
       </List>
-      <Modal isOpen={open} handleClose={handleClose}>
-        <h3>Add Security Modal</h3>
-      </Modal>
+      {/* make this a seperate comp and add input focus on rendering */}
+      <AddEquityModal
+        addTicker={addTicker}
+        handleClose={handleClose}
+        open={open}
+        setOpen={setOpen}
+      />
     </div>
   );
 };

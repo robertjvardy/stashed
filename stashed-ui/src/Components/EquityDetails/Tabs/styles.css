@@ -1,0 +1,14 @@
+.eq-tab-container {
+  max-width: 1200px;
+  width: 100%;
+}
+
+.eq-tab-title {
+  margin: 0 0 10px;
+  font-size: 40px;
+}
+
+.eq-tab-subtitle {
+  margin: 0 0 10px;
+  font-size: 25px;
+}

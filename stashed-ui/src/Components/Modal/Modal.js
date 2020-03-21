@@ -20,7 +20,7 @@ const useStyles = makeStyles(theme => ({
 
 const UIModal = props => {
   const classes = useStyles();
-  const { isOpen, handleClose } = props;
+  const { isOpen, handleClose, children } = props;
   return (
     <MaterialModal
       aria-labelledby="transition-modal-title"
@@ -35,7 +35,7 @@ const UIModal = props => {
       }}
     >
       <Fade in={isOpen}>
-        <div className={classes.paper}>{props.children}</div>
+        <div className={classes.paper}>{children}</div>
       </Fade>
     </MaterialModal>
   );
