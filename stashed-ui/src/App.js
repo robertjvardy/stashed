@@ -1,56 +1,39 @@
-import React, { useState } from "react";
+import React from "react";
 import "./App.css";
-import NavBar from "./Components/NavBar/NavBar";
-import PannelsContainer from "./Components/PannelsContainer/PannelsContainer";
-import { Route, Switch } from "react-router-dom";
-import Drawer from "@material-ui/core/Drawer";
-import SideDrawer from "./Components/SideDrawer/SideDrawer";
-import EquityDetails from "./Components/EquityDetails/EquityDetails";
+import { Switch, Route } from "react-router-dom";
+import { Layout } from "./components/Layout";
+import { Dashboard } from "./scenes/Dashboard";
+import EquityDetails from "./scenes/EquityDetails/EquityDetails";
+
+const tempData = [
+  { ticker: "AAPL" },
+  { ticker: "TSLA" },
+  { ticker: "MSFT" },
+  { ticker: "AAPL" },
+  { ticker: "TSLA" },
+  { ticker: "MSFT" },
+  { ticker: "TSLA" },
+  { ticker: "MSFT" }
+];
 
 const App = () => {
-  const [tickers, setTickers] = useState(["AAPL", "TSLA"]);
-  const [state, setState] = useState({
-    left: false
-  });
-
-  const addTicker = newTicker => {
-    if (tickers.includes(newTicker)) throw "Equity Already Tracked";
-    setTickers([...tickers, newTicker]);
-  };
-
-  // TODO remove side argument
-  const toggleDrawer = (side, open) => event => {
-    if (
-      event.type === "keydown" &&
-      (event.key === "Tab" || event.key === "Shift")
-    ) {
-      return;
-    }
-    setState({ ...state, [side]: open });
-  };
-
+  const routes = (
+    <Switch>
+      <Route
+        path="/equityDetails/:ticker"
+        render={({ match }) => <EquityDetails ticker={match.params.ticker} />}
+      />
+      <Route
+        path="/"
+        strict
+        exact
+        render={() => <Dashboard equities={tempData} />}
+      />
+    </Switch>
+  );
   return (
     <div className="App">
-      <NavBar handleDrawerToggle={toggleDrawer} />
-      <div className="main-content">
-        <Switch>
-          <Route
-            path="/equity/:ticker"
-            strict
-            sensitive
-            render={({ match }) => (
-              <EquityDetails ticker={match.params.ticker} />
-            )}
-          />
-          <Route
-            path="/"
-            render={() => <PannelsContainer tickers={tickers} />}
-          />
-        </Switch>
-        <Drawer open={state.left} onClose={toggleDrawer("left", false)}>
-          <SideDrawer addTicker={addTicker} />
-        </Drawer>
-      </div>
+      <Layout>{routes}</Layout>
     </div>
   );
 };
